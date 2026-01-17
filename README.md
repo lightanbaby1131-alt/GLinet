@@ -5,10 +5,20 @@
 
 ---
 
-## 🚀 一键安装命令（SSH 直接复制执行）
+<div align="center">
+
+# 🚀 GLinet BE3600 一键工具箱
+
+轻松为 **GL-iNet BE3600** 添加 iStoreOS 风格界面与增强功能  
+无需刷机 · 无风险软改 · 可随时恢复
+
+---
+
+## ⭐ 一键安装命令（SSH 直接复制执行）
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
+
 
 # GLinet BE3600 一键 iStoreOS 风格化技术原理说明
 
