@@ -18,7 +18,7 @@
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
-
+```
 
 # GLinet BE3600 一键 iStoreOS 风格化技术原理说明
 
