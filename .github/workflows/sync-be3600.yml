@@ -9,6 +9,9 @@ jobs:
   sync-be3600:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write   # ←←← 关键：允许 push
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -19,19 +22,16 @@ jobs:
           UPSTREAM_URL="https://mt3000.netlify.app/be3600.sh"
 
           echo "Downloading from $UPSTREAM_URL"
-          # 下载到临时文件
           if ! curl -fsSL "$UPSTREAM_URL" -o /tmp/be3600.upstream.sh; then
             echo "Upstream not reachable, skip sync."
             exit 0
           fi
 
-          # 检查文件是否为空
           if [ ! -s /tmp/be3600.upstream.sh ]; then
             echo "Upstream file is empty, skip sync."
             exit 0
           fi
 
-          # 如果本地还没有 be3600.sh，直接用上游的
           if [ ! -f be3600.sh ]; then
             echo "Local be3600.sh not found, using upstream version."
             mv /tmp/be3600.upstream.sh be3600.sh
@@ -39,7 +39,6 @@ jobs:
             exit 0
           fi
 
-          # 比较新旧文件是否有变化
           if diff -q /tmp/be3600.upstream.sh be3600.sh >/dev/null 2>&1; then
             echo "No changes from upstream."
             exit 0
