@@ -10,7 +10,7 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
 ```
 
-⭐ 一键安装命令（SSH 直接复制执行）
+## ⭐ 一键安装命令（SSH 直接复制执行）
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
