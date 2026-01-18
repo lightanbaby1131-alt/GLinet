@@ -10,17 +10,44 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
 ```
 
-# GLinet BE3600 一键 iStoreOS 风格化技术原理说明
+⭐ 一键安装命令（SSH 直接复制执行）
 
-本项目的目标是：在 **不刷机、不改底层分区、不更换固件** 的前提下，让 GL-iNet BE3600 在视觉和功能上尽可能接近 iStoreOS，同时保留官方固件的稳定性与可回退能力。
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/be3600.sh)"
+```
 
 ---
 
-## 1. 基础原理：GL.iNet 固件本质是 OpenWrt
+🧭 新增功能：检测 iStore 源可用性（国内网络环境）
+
+在国内网络环境下，先运行检测脚本，确保 DNS、HTTP、opkg 都正常，再运行主工具箱脚本。
+
+`sh
+curl -fsSL https://raw.githubusercontent.com/lightanbaby1131-alt/GLinet/master/istoresourcecheck.sh -o /tmp/istoresourcecheck.sh \
+  && chmod +x /tmp/istoresourcecheck.sh \
+  && /tmp/istoresourcecheck.sh
+`
+
+检测结果会显示：
+- ✅ DNS 是否解析成功  
+- ✅ 源页面是否可访问  
+- ✅ opkg update 是否能拉取包列表  
+
+如果全部通过，再运行主脚本即可。
+
+---
+
+GLinet BE3600 一键 iStoreOS 风格化技术原理说明
+
+本项目的目标是：在 不刷机、不改底层分区、不更换固件 的前提下，让 GL-iNet BE3600 在视觉和功能上尽可能接近 iStoreOS，同时保留官方固件的稳定性与可回退能力。
+
+---
+
+1. 基础原理：GL.iNet 固件本质是 OpenWrt
 
 GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
-- 使用 `opkg` 作为包管理器
+- 使用 opkg 作为包管理器
 - 支持自定义软件源（feeds）
 - 支持 LuCI Web 界面与主题
 - 支持通过软件包扩展功能（如 iStore、AdGuardHome 等）
@@ -29,13 +56,13 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 2. 核心思路：软改而非刷机
+2. 核心思路：软改而非刷机
 
 本项目的脚本主要做三件事：
 
-1. **添加 iStoreOS 相关软件源**
-2. **安装 iStoreOS 风格的 UI、主题、商店与插件**
-3. **调整 GL 官方界面入口与默认主题，使整体体验接近 iStoreOS**
+1. 添加 iStoreOS 相关软件源
+2. 安装 iStoreOS 风格的 UI、主题、商店与插件
+3. 调整 GL 官方界面入口与默认主题，使整体体验接近 iStoreOS
 
 整个过程：
 
@@ -48,17 +75,17 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 3. 软件源与软件包
+3. 软件源与软件包
 
 脚本会添加 iStore 相关的软件源，例如：
 
 - iStore / LinkEase 仓库
 - 其他第三方 LuCI 插件源
 
-然后通过 `opkg` 安装：
+然后通过 opkg 安装：
 
-- `luci-app-istore` / `luci-app-store`（iStore 商店）
-- `luci-theme-argon`（iStoreOS 常用主题）
+- luci-app-istore / luci-app-store（iStore 商店）
+- luci-theme-argon（iStoreOS 常用主题）
 - 其他 UI 辅助插件与功能组件
 
 这使得：
@@ -68,7 +95,7 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 4. UI 与主题层面的改造
+4. UI 与主题层面的改造
 
 脚本会：
 
@@ -87,7 +114,7 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 5. 功能增强：风扇控制、AdGuardHome、UI 辅助插件等
+5. 功能增强：风扇控制、AdGuardHome、UI 辅助插件等
 
 脚本还会：
 
@@ -99,13 +126,13 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 6. 安全性与可回退性
+6. 安全性与可回退性
 
 由于本项目不刷机、不改分区、不改内核，因此具备以下优点：
 
-- **可通过卸载软件包、恢复配置来回退**
-- **可通过恢复出厂设置回到 GL 官方默认状态**
-- **不会因为刷错固件导致设备变砖**
+- 可通过卸载软件包、恢复配置来回退
+- 可通过恢复出厂设置回到 GL 官方默认状态
+- 不会因为刷错固件导致设备变砖
 
 同时，本仓库通过 GitHub Actions 自动从上游同步脚本：
 
@@ -121,7 +148,7 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 
 ---
 
-## 7. 与“真正刷入 iStoreOS 固件”的区别
+7. 与“真正刷入 iStoreOS 固件”的区别
 
 | 对比项           | 本项目（软改）                         | 刷入 iStoreOS 固件                     |
 |------------------|----------------------------------------|----------------------------------------|
@@ -135,5 +162,3 @@ GL-iNet 官方固件基于 OpenWrt 构建，具备以下特性：
 本项目的定位是：
 
 > 在尽量不增加风险的前提下，让 BE3600 尽可能接近 iStoreOS 的使用体验。
-
----
