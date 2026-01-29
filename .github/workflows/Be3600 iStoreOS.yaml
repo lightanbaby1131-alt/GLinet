@@ -1,4 +1,4 @@
-name: Build Be3600 iStoreOS Installer
+name: Be3600 iStoreOS Installer
 
 on:
   workflow_dispatch:
