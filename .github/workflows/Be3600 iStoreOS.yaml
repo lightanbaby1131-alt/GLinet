@@ -45,29 +45,40 @@ jobs:
           echo 'echo "✅ 安装完成！请访问 http://192.168.8.1:8080"' >> be3600_istoreos.run
           chmod +x be3600_istoreos.run
 
-      - name: Create Release
+      - name: Upload artifact (fallback if no PAT)
+        uses: actions/upload-artifact@v3
+        with:
+          name: be3600-istoreos-installer
+          path: |
+            istoreos_offline.tar.gz
+            be3600_istoreos.run
+
+      - name: Create Release (only if PAT is set)
+        if: ${{ secrets.GH_PAT != '' }}
         id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: be3600-istoreos-${{ github.run_number }}
           release_name: "Be3600 iStoreOS Installer ${{ github.run_number }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
-      - name: Upload tar.gz
+      - name: Upload tar.gz to Release
+        if: ${{ secrets.GH_PAT != '' }}
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: istoreos_offline.tar.gz
           asset_name: istoreos_offline.tar.gz
           asset_content_type: application/gzip
 
-      - name: Upload .run file
+      - name: Upload .run file to Release
+        if: ${{ secrets.GH_PAT != '' }}
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: be3600_istoreos.run
