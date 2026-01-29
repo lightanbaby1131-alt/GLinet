@@ -46,14 +46,30 @@ jobs:
           chmod +x be3600_istoreos.run
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        id: create_release
+        uses: actions/create-release@v1
         with:
-          tag_name: be3600-istoreos-${{ github.run_id }}
-          name: "Be3600 iStoreOS Installer ${{ github.run_id }}"
-          draft: false
-          prerelease: false
-          files: |
-            istoreos_offline.tar.gz
-            be3600_istoreos.run
+          tag_name: be3600-istoreos-${{ github.run_number }}
+          release_name: "Be3600 iStoreOS Installer ${{ github.run_number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload tar.gz
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: istoreos_offline.tar.gz
+          asset_name: istoreos_offline.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload .run file
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: be3600_istoreos.run
+          asset_name: be3600_istoreos.run
+          asset_content_type: text/x-shellscript
